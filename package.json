@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "start":"ts-node proyecto3.ts",
+    "start":"ts-node clase2/ejercicios2.ts",
     "dev":"nodemon --exec ts.node proyecto1.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
