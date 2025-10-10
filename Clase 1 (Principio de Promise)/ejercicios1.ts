@@ -1,5 +1,5 @@
 import axios from "axios";
-//ejercicio1 
+
 type Cositas = {
     query: string ,
     value: string | undefined 
@@ -48,8 +48,8 @@ const getCharacter = (name?: string , status?: string , gender?: string) =>{
     }
     
 
-    getCharacter("rick");
-//Ejercicio2
+    //getCharacter("rick");
+
     /*
         Hacer una funcion que al pasar un ID reciba en que episodios sale
     

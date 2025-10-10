@@ -1,5 +1,12 @@
 import axios from "axios";
 
+type Character = {
+  id: number;
+  name: string;
+  status: string;
+  species: string;
+  image: string;
+};
 axios.get("https://rickandmortyapi.com/api/character/3").then((res)=>{
     console.log(res.data);
 })
@@ -8,11 +15,14 @@ const getCharacter = async (id: number)=>{
     const res = await axios.get("https://rickandmortyapi.com/api/character/$(id)");
     return res.data;
 }
-const getCharacterClassic = async (id: number)=>{
-    const res = await axios.get("https://rickandmortyapi.com/api/character/$(id)").then((res)=>{
-         return res.data;  
- });
-}
+const getCharacterClassic = async (id: number) => {
+  const res = await axios
+    .get(`https://rickandmortyapi.com/api/character/${id}`)
+    .then((res) => {
+      return res.data;
+    });
+  return res;
+};
 // getCharacterClassic(1).then((char)=>{
 //console.log(char);
 //})
