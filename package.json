@@ -4,20 +4,26 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "start":"ts-node clase2/ejercicios2.ts",
-    "dev":"nodemon --exec ts.node proyecto1.ts",
+    "start": "ts-node clase3/clase3.ts",
+    "dev": "nodemon --exec ts.node proyecto1.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type":"module",
+  "type": "module",
   "dependencies": {
     "@types/axios": "^0.9.36",
     "@types/node": "^24.6.2",
     "axios": "^1.12.2",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3"
   }
 }
