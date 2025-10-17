@@ -55,32 +55,33 @@ app.get("/personas/:id", (req, res) => {
 // })
 app.post("/personas", (req, res) => {
 
-  //at(-1) es la ultima pos del array, el array es como un circulo, si tienes 5 y pones 6, será el primero
+  // at(-1) es la última posición del array, el array es como un círculo, si tienes 5 y pones 6, será el primero
   const lastId = personas.at(-1)?.id;
   const newId = lastId ? lastId + 1 : 1; // Asegúrate de no usar 0 como ID para la primera persona
 
-  //hay que comprobar uno a uno si existe, si no se va TODO a la mierda
+  // Obtener los datos del cuerpo de la solicitud
   const newName = req.body.name;
   const newLastName = req.body.lastName;
-  const newPersona: Person = {
-    id: newId,
-    name: newName,
-    lastName: newLastName
-  };
 
-  // const nuevaPersona = {
-  //     id:newId //el id SIEMPRE lo creamos, nunca de devolución, siempre lo gestionamos nostos
-  //     ... req.body
-  // }
-  if (newName && newLastName && newLastName.length) { //ASi comprobamos si es string
+  // Comprobamos que newName y newLastName son cadenas no vacías
+  if (typeof newName === 'string' && typeof newLastName === 'string' ) { //es mejor hacer esto que hacer .length()
+    const newPersona: Person = {
+      id: newId,
+      name: newName,
+      lastName: newLastName
+    };
+
+    // Agregamos la nueva persona al array
     personas.push(newPersona);
-    res.status(201).json(newPersona); //le pasas lo que se ha creado 
+    res.status(201).json(newPersona); // Respondemos con la persona recién creada
   } else {
     res.status(400).send("Wrong body for person created"); // Cambié 404 por 400 ya que es un error de petición
   }
+});
+
   //Este control sigue mal, puede ser que recibamos algo pero no sabemos si lo que recibimos es correcto
   //ES MUY IMPORTANTE a la hora de crear solo coger lo que nos interesa, si se pone de más solo querremos coger ciertas cosas 
-})
+
 
 app.put("/personas/:id",(req,res)=>{
     const id = Number(req.params.id);
