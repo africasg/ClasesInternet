@@ -2,11 +2,14 @@ import express from "express";
 import cors from "cors";
 import axios from "axios";
 
-const app = express()
-app.use(express.json())
 
-
+const app = express();
 const port = 3000;
+
+app.use(express.json())
+app.use(cors())
+
+
 
 type Team = {
  id: number
@@ -33,7 +36,7 @@ app.get("/teams/:id",(req,res)=>{
 });
 app.post("/teams",(req,res)=>{
     const ultimoId = Date.now(); //me gusta mas con id unico creado por nosotros
-    console.log(req.body);
+    //console.log(req.body);
     const nuevoName = req.body?.name;
     const nuevaCity = req.body?.city;
     const nuevosTitles = req.body?.titles;
@@ -49,6 +52,7 @@ app.post("/teams",(req,res)=>{
      }else{
         res.status(404).send("Has introducido mal un parámetro")
      }
+     
        
 })
 
@@ -97,6 +101,6 @@ const testAPI= async() => {
     
     return FINAL;
   }
-  setTimeout(() => {testAPI()}, 1000);
+ setTimeout(() => {testAPI()}, 1000);
 
 
