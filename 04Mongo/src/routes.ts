@@ -6,15 +6,25 @@ import { ObjectId } from "mongodb";
 const router = Router();
 const coleccion = () => getDB().collection("Clase1");
 
-// router.get("/", async (req, res) => {
-//   try {
-//     const albums = await coleccion().find().toArray();
-//     res.status(200).json(albums);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(404).json({ error: "OH HELL NAH" });
-//   }
-// });
+router.get("/", async (req, res) => {
+  try {
+    const page = Number(req.query.page) || 1; //hay que marcar que es number, si no puede que sea string
+    const limit = Number(req.query?.limit) || 25;
+    const skip = (page-1) * limit 
+    const albums = await coleccion().find().sort({year:1}).skip(skip).limit(limit).toArray();
+    res.json({
+      info:{
+        limite: limit,
+        pagina:page
+      },
+      results:albums
+    });
+    res.status(200).json(albums);
+  } catch (error) {
+    console.error(error);
+    res.status(404).json({ error: "OH HELL NAH" });
+  }
+});
 // router.get("/", async (req, res) => {
 //   try {
 //     const newer = req.query.newer ? Number(req.query.newer) : null;
@@ -35,7 +45,7 @@ const coleccion = () => getDB().collection("Clase1");
 // router.get("/", async (req, res) => {
 //   try {
 //     const queryYear = req.query?.year;
-//             const albums = await coleccion().find(queryYear? {year:queryYear}:{}).toArray();
+//             const albums = await coleccion().find(queryYear? {year:queryYear}:{}).toArray(); //se tiene que meter modo string
 //              res.status(200).json(albums);
 //   } catch (error) {
 //     console.error(error);
@@ -43,17 +53,17 @@ const coleccion = () => getDB().collection("Clase1");
 //   }
 // }
 // );
-router.get("/", async (req, res) => {
-  try {
-    const publicationCountry = req?.query.country;
+// router.get("/", async (req, res) => {
+//   try {
+//     const publicationCountry = req?.query.country;
 
-    const albums =  await coleccion().find(publicationCountry ? {publicationCountries: {$in:[publicationCountry]}}: {}).toArray();
-    res.json(albums);
-  } catch (error) {
-    console.error(error);
-    res.status(404).json({ error: "OH HELL NAH" });
-  }
-});
+//     const albums =  await coleccion().find(publicationCountry ? {publicationCountries: {$in:[publicationCountry]}}: {}).toArray();
+//     res.json(albums);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(404).json({ error: "OH HELL NAH" });
+//   }
+// });
 //get
 router.post("/",async (req,res )=>{
 try{
