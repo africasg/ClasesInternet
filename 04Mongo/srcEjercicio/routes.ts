@@ -134,33 +134,35 @@ router.post("/many" , async(req,res)=>{
   }
 })
 
-
-
-// //put 
-// router.put("/:id",async (peticion,respuesta )=>{
-//   try{
-//       const result = await coleccion().updateOne(//Recibe el filtro y despues el objeto a actualizar
-//         {_id : new ObjectId((peticion.params.id))}, // te acepta id, una sola cosa y muy concreta. La otra opcion, findone&update te deja ver muchos mas filtros
-//         {$set :peticion.body}
-//       );
-//       respuesta.json(result);
+ //put 
+router.put("/:id",async (peticion,respuesta )=>{
+  try{
+      let comprobacion = comprobarObjeto(peticion.body);
+      if(comprobacion){
+         const result = await coleccion().updateOne(
+        {_id : new ObjectId((peticion.params.id))},
+        {$set :peticion.body}
+      );
+      result ? respuesta.json(result) : respuesta.status(404).json({error: "No se ha encontrado el id"})
       
-//   }catch(err){
-//     respuesta.status(404).json({error: "no se actualizo"})
-//   }
-// })
+      }else{
+          respuesta.status(404).json({error: "No se ha actualizado"})
+      }
+     
+  }catch(err){
+    respuesta.status(404).json({error: "no se actualizo"})
+  }
+})
 
 
-
-
-// router.delete("/:id", async (req,res) =>{
-//   try{
-//       const result = await coleccion().deleteOne(
-//         {_id : new ObjectId((req.params.id))})
-//        result && res.status(400).send({ message: `Objeto con id ${req.params.id} eliminado correctamente` })
-//   }catch(err){
-//     res.status(404).json({error: "No se elimino na"})
-//   }
-// })
+router.delete("/:id", async (req,res) =>{
+  try{
+      const result = await coleccion().deleteOne(
+        {_id : new ObjectId((req.params.id))})
+       result && res.status(400).send({ message: `Objeto con id ${req.params.id} eliminado correctamente` })
+  }catch(err){
+    res.status(404).json({error: "No se elimino na"})
+  }
+})
 
 export default router;

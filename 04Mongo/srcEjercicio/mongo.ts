@@ -13,8 +13,12 @@ export const connectToMongoDb = async (): Promise<void>=>{
         const urlMongo = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.CLUSTER}.rinwayw.mongodb.net/?appName=${process.env.CLUSTER_NAME}`;
         const urlMongoProfe = "mongodb+srv://kirk:patataEspacial@mongomake.3ta2r.mongodb.net/?appName=MongoMake"
         client = new MongoClient(urlMongo);
+                console.log("estamos dentro2")
+
         await client.connect(); 
         db = client.db("EjercicioClase")
+                console.log("estamos dentro3")
+
             console.log("Conectado a Mongo my g");
 
 
