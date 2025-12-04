@@ -2,15 +2,18 @@ import { ApolloServer } from "apollo-server";
 import { connectToMongoDb } from "./db/mongo"
 import { typeDefs } from "./graphql/schema";
 import { resolvers } from "./graphql/resolver";
+import { getUserFromToken } from "./auth";
 
 const start = async() =>{
     await connectToMongoDb();
 
     const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    context: ({req,res}) => {
-        return {req};
+    typeDefs, //schema
+    resolvers, //resolvers
+    context:async ({req,res}) => { //se ejecuta siemopre antes de cualquier llamada de gql, aquí es donde haremos validación
+        const authHeader = req.headers.authorization;
+        const user = authHeader ? await getUserFromToken(authHeader!) : null;
+        return {user};
     }
     });
     await server.listen({port:4000}); 

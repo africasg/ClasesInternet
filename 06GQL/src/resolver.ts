@@ -1,3 +1,4 @@
+//lógica de lo que hemos hecho en el schema 
 import { IResolvers } from "@graphql-tools/utils"
 
 

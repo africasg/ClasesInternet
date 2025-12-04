@@ -2,8 +2,9 @@ import { IResolvers } from "@graphql-tools/utils"
 import { getDB } from "../db/mongo"
 import { ObjectId } from "mongodb";
 const collectionV = "Videogames"
-
-// const coleccionVideojuegos = ()=> get.DB().collection("videojuegos")
+import { createUser,validateUser } from "../collections/users";
+import { signToken } from "../auth";
+// const colecionVideojuegos = ()=> get.DB().collection("videojuegos")
 export const resolvers: IResolvers = {
     Query: {
         getVideoGames: async ()=> {
@@ -13,7 +14,15 @@ export const resolvers: IResolvers = {
         getVideoGame: async (_,{_id}:{_id:string})=>{
         const db =getDB(); 
         return db.collection(collectionV).findOne({_id:new ObjectId(_id)});
+    },
+    me : async (__,_, {user})=>{//en el parentesis se pone (gql,argumentos,contexto); en la parte donde pone user, se puede poner ctx.user
+     if(!user) return null;
+     return {
+        id:user._id.toString(),
+        email:user.email
+     }
     }
+
 },
 
     Mutation: {
@@ -31,6 +40,15 @@ export const resolvers: IResolvers = {
                     platform
                 }
             
+        },
+        register: async(_,{email,password}: {email:string, password:string})=>{
+            const userId = await createUser(email,password)
+            return signToken(userId)
+        },
+        login: async(_,{email,password}: {email:string, password:string})=>{
+            const user = await validateUser(email,password)
+            if(!user) throw new Error ("Esos credenciales no son correctos mi vida");
+             return signToken(user._id.toString());
         }
     }
 }

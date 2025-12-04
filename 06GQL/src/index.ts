@@ -1,4 +1,4 @@
-import { ApolloServer } from "apollo-server";
+import { ApolloServer } from "apollo-server"; //npm install apollo (hacer con el ejecutable)
 import { resolvers } from "./resolver";
 import { typeDefs } from "./schema";
 
