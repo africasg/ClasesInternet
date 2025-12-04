@@ -5,7 +5,7 @@ export const typeDefs = gql`
     type User{
         id: ID!
         email:String! 
-        
+        listOfMyGames:[VideoGame]
     }
     type VideoGame{
         _id: ID!,
@@ -25,6 +25,7 @@ export const typeDefs = gql`
         addVideogame(name: String!, platform: String!, releaseYear: Int!): VideoGame!
         register(email: String!, password: String!): String!
         login(email: String!, password: String!): String!
+        addVideogameToMyList(VideoGameID: ID!) : User
     }
 
 `;

@@ -1,10 +1,12 @@
 import { IResolvers } from "@graphql-tools/utils"
 import { getDB } from "../db/mongo"
 import { ObjectId } from "mongodb";
-const collectionV = "Videogames"
+const collectionV = "Videogames";
+const collection_users = "users";
 import { createUser,validateUser } from "../collections/users";
 import { signToken } from "../auth";
 // const colecionVideojuegos = ()=> get.DB().collection("videojuegos")
+
 export const resolvers: IResolvers = {
     Query: {
         getVideoGames: async ()=> {
@@ -49,6 +51,36 @@ export const resolvers: IResolvers = {
             const user = await validateUser(email,password)
             if(!user) throw new Error ("Esos credenciales no son correctos mi vida");
              return signToken(user._id.toString());
+        },
+         addVideogameToMyList: async (_,{VideoGameID}:{VideoGameID:string},{user}) =>{
+            if(!user) throw new Error ("Logueate amiga <3");
+            const db= getDB();
+            console.log(user)
+                const videogameToAdd = await db.collection(collectionV).findOne({_id: new ObjectId(VideoGameID)});
+              //  console.log(videogameToAdd)
+                if (!videogameToAdd) throw new Error("Te has marcado un GTAVI (no existe)");
+            await db.collection(collection_users).updateOne(
+        { _id: new ObjectId(user._id) },
+        { $addToSet: { listOfMyGames: VideoGameID }}
+      );
+       const updateUser = await db.collection(collection_users).findOne({
+        _id: new ObjectId(user._id),
+      });
+      console.log("User del monog", updateUser);
+      if(!updateUser) throw new Error ("No existes ")
+        return {
+            id:updateUser._id.toString(),
+            ...updateUser
+        }
+    }
+},
+
+User:{
+    listOfMyGames : async (parent) => {
+            const db = getDB();
+            const listOfVideogameIDs = parent.listOfMyGames as Array<string> || [];
+            const objectsID = listOfVideogameIDs.map((id)=> new ObjectId(id))
+            return db.collection(collectionV).find({_id:{ $in: objectsID}}).toArray();
         }
     }
 }
