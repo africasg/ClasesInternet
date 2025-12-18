@@ -5,7 +5,7 @@ export const typeDefs = gql`
     type User{
         id: ID!
         email:String! 
-        listOfMyGames:[VideoGame]
+        listOfMyGames:[VideoGame]!
     }
     type VideoGame{
         _id: ID!,

@@ -5,6 +5,7 @@ const collectionV = "Videogames";
 const collection_users = "users";
 import { createUser,validateUser } from "../collections/users";
 import { signToken } from "../auth";
+import { UserVideoGame } from "../types/UserVideoGame";
 // const colecionVideojuegos = ()=> get.DB().collection("videojuegos")
 
 export const resolvers: IResolvers = {
@@ -21,7 +22,8 @@ export const resolvers: IResolvers = {
      if(!user) return null;
      return {
         id:user._id.toString(),
-        email:user.email
+        email:user.email,
+        listOfMyGames: user.listOfMyGames || [],
      }
     }
 
@@ -55,7 +57,7 @@ export const resolvers: IResolvers = {
          addVideogameToMyList: async (_,{VideoGameID}:{VideoGameID:string},{user}) =>{
             if(!user) throw new Error ("Logueate amiga <3");
             const db= getDB();
-            console.log(user)
+        
                 const videogameToAdd = await db.collection(collectionV).findOne({_id: new ObjectId(VideoGameID)});
               //  console.log(videogameToAdd)
                 if (!videogameToAdd) throw new Error("Te has marcado un GTAVI (no existe)");
@@ -76,7 +78,7 @@ export const resolvers: IResolvers = {
 },
 
 User:{
-    listOfMyGames : async (parent) => {
+    listOfMyGames : async (parent: UserVideoGame) => {
             const db = getDB();
             const listOfVideogameIDs = parent.listOfMyGames as Array<string> || [];
             const objectsID = listOfVideogameIDs.map((id)=> new ObjectId(id))
